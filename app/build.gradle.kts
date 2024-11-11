@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -81,9 +82,10 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
-
+    implementation(libs.navigation.compose)
     implementation(libs.androidx.material3)
 
     implementation(libs.coil)
     implementation(libs.io.coil.kt)
+    implementation(libs.kotlinx.collections.immutable)
 }
