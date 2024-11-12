@@ -1,5 +1,6 @@
 package com.dbng.tastyrecipesapp.feature_menu.presentation.menu.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -35,14 +38,14 @@ import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 @Preview
 @Composable
 fun FoodItemPreview() {
-    FoodItem(
-        MenuItem(1,"Test","http//imageurl"),
-        onEdit={
-
-        },
-        onItemClick={
-
-        })
+//    FoodItem(
+//        null,
+//        onEdit={
+//
+//        },
+//        onItemClick={
+//
+//        })
 }
 
 @Composable
@@ -54,7 +57,7 @@ fun FoodItem(
     Card(
         modifier = Modifier.fillMaxSize(),
         onClick = {
-            item.id?.let { onItemClick(it.toString()) }
+            onItemClick(item.id.toString())
         },
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -93,7 +96,23 @@ fun FoodItem(
                             fontSize = 20.sp
                         )
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row(
+                        modifier = Modifier
+                            .height(40.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+
+//                        Button(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            shape = RoundedCornerShape(5.dp),
+//                            onClick = {
+//                            }
+//                        ) {
+                            Text(text = "Detail >>", fontSize = 16.sp)
+//                        }
+                    }
                 }
 
 
@@ -103,16 +122,14 @@ fun FoodItem(
                         .fillMaxWidth(.40F),
 
                     ) {
-                    if( item.imageURL!=null) {
-                        AsyncImage(
-                            model = item.imageURL,
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .size(138.dp)
-                        )
-                    }
+                    AsyncImage(
+                        model = item.imageURL,
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(138.dp)
+                    )
                 }
             }
         }

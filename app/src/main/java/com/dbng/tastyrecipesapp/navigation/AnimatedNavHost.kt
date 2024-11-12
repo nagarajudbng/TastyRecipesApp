@@ -1,11 +1,11 @@
 package com.dbng.tastyrecipesapp.navigation
 
-import android.annotation.SuppressLint
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -13,54 +13,54 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.ui.MenuScreen
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menudetails.MenuDetailsScreen
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
 
-enum class MenuType{
-    EDIT,
-    ADD
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+// Created by Nagaraju on 13/11/24.
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController,
-    startDestination: String = NavigationItem.Menu.route
-){
+fun MyAnimatedNavHost(modifier: Modifier = Modifier,
+                    navController: NavHostController,
+                    startDestination: String = NavigationItem.Menu.route
+) {
+    val navController = rememberAnimatedNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    Log.d("Navigator","Navigator AppNavHost")
-    var context = LocalContext.current;
-
-    var launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {
-        }
-    )
-
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
     ) {
-        Column {
-            NavHost(
-                modifier = modifier,
+        Column (
+            modifier = Modifier.padding(
+                top = it.calculateTopPadding(),
+                bottom = it.calculateBottomPadding()
+            )
+            ){
+            AnimatedNavHost(
                 navController = navController,
-                startDestination = startDestination
+                startDestination = NavigationItem.Menu.route
             ) {
-                composable(NavigationItem.Menu.route) {
+                composable(
+                    route = NavigationItem.Menu.route,
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(500))
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(500))
+                    }
+                ) {
                     MenuScreen(
-                        navController = navController,
+                        navController,
                         onNavigation = { str, id ->
                             navController.navigate("${NavigationItem.MenuDetails.route}/${id}")
                         },
@@ -71,9 +71,22 @@ fun AppNavHost(
                         }
                     )
                 }
+
                 composable(
                     "${NavigationItem.MenuDetails.route}/{itemID}",
-                    arguments = listOf(navArgument("itemID"){type= NavType.IntType})
+                    arguments = listOf(navArgument("itemID"){type= NavType.IntType}),
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(500))
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(500))
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(500))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(500))
+                    }
                 ) { backStack ->
                     val userType = backStack.arguments?.getInt("itemID") ?: 0
                     MenuDetailsScreen(
@@ -91,10 +104,6 @@ fun AppNavHost(
                 }
 
             }
-
         }
     }
 }
-
-
-

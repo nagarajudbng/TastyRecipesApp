@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.dbng.tastyrecipesapp.R
 import com.dbng.tastyrecipesapp.core.utils.ThemeColors
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
@@ -55,6 +56,7 @@ fun MenuScreenPreview() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(
+    navController: NavHostController,
     onNavigation: (String, Any?) -> Unit,
     showMessage: (String) -> Unit
 ) {

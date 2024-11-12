@@ -88,4 +88,6 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.io.coil.kt)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.accompanist.navigation.animation)
+
 }

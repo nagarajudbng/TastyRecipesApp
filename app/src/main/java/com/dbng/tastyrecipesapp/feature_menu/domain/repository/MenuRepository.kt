@@ -6,4 +6,6 @@ import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 interface MenuRepository {
     suspend fun fetchMenuItems(from: Int, size: Int): Resource<List<MenuItem>>
     suspend fun fetchMenuItemMoreInfo(itemID:Int): Resource<MenuItem>
+    fun getTotalItemCount(): Int
+    suspend fun fetchMenuItemsMoreInfo(itemID: Int): Resource<MenuItem>
 }
