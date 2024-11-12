@@ -25,17 +25,18 @@ class MenuViewModel @Inject constructor(
     val items = _items
     var isLoading = mutableStateOf(false)
 
-    fun fetchMenuList(from: Int, size: Int) {
+    private var currentIndex = 0
+    private var pageSize = 20
+    fun fetchMenuList() {
         viewModelScope.launch {
             isLoading.value = true
-            val response = menuUseCase.getMenuList(from, size)
-
-            when (response) {
+            when (val response = menuUseCase(currentIndex, pageSize)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     response.data?.let {
-                        _items.value = _items.value + it
-                        _menuState.value = MenuUIState.Success(it)
+                        _items.value += it
+                        _menuState.value = MenuUIState.Success
+                        currentIndex = items.value.size
                     }
                 }
 

@@ -8,7 +8,7 @@ import javax.inject.Inject
 class  MenuUseCase @Inject constructor(
     private val repository : MenuRepository
 ) {
-    suspend fun getMenuList(from: Int, size: Int): Resource<List<MenuItem>> {
+    suspend operator fun invoke(from: Int, size: Int): Resource<List<MenuItem>> {
         return repository.fetchMenuItems(from,size)
     }
 }

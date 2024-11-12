@@ -30,7 +30,7 @@ object AppModule {
                 val token = sharedPreferences.getString(Constants.KEY_JWT_TOKEN, "")
                 val modifiedRequest = it.request().newBuilder()
 //                    .addHeader("Authorization", "Bearer $token")
-                    .addHeader("x-rapidapi-key", "a0c750241fmsh6adecae402c2cd6p137771jsnd9ba5de15116")
+                    .addHeader("x-rapidapi-key", "b1f76604e2msh922e1e2bf913e31p1fba1ejsneb8f064b5c2d")
                     .addHeader("x-rapidapi-host", "tasty.p.rapidapi.com")
                     .build()
                 it.proceed(modifiedRequest)

@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,10 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,10 +42,7 @@ import com.dbng.tastyrecipesapp.R
 import com.dbng.tastyrecipesapp.core.utils.ThemeColors
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel.MenuViewModel
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
@@ -64,11 +56,12 @@ fun MenuScreenPreview() {
 @Composable
 fun MenuScreen(
     onNavigation: (String, Any?) -> Unit,
+    showMessage: (String) -> Unit
 ) {
     val viewModel = hiltViewModel<MenuViewModel>()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchMenuList(0, 20)
+        viewModel.fetchMenuList()
     }
 
     val listState = rememberLazyListState()
@@ -77,7 +70,7 @@ fun MenuScreen(
     fun loadMoreItems() {
         coroutineScope.launch {
             if (!viewModel.isLoading.value) {
-                viewModel.fetchMenuList(viewModel.items.value.size, 20)
+                viewModel.fetchMenuList()
             }
         }
     }
@@ -123,6 +116,9 @@ fun MenuScreen(
                         onEdit = {},
                         onItemClick = {
                             onNavigation("Details", it)
+                        },
+                        showMessage = {
+                            showMessage(it)
                         }
                     )
                 }
@@ -140,6 +136,7 @@ fun ProductList(
     listState: LazyListState,
     isLoading: Boolean,
     buffer: Int = 2,
+    showMessage: (String) -> Unit,
 ) {
     val uiState by viewModel.menuState
     val shouldLoadMore = remember {
@@ -206,16 +203,7 @@ fun ProductList(
         }
 
         is MenuUIState.Error -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "An error occurred. Please try again.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+            showMessage("An error occurred. Please try again.")
         }
     }
 }

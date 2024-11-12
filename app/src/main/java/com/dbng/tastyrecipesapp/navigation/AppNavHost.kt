@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.ui.MenuScreen
+import kotlinx.coroutines.launch
 
 enum class MenuType{
     EDIT,
@@ -58,6 +59,11 @@ fun AppNavHost(
                     MenuScreen(
                         onNavigation = { str, str2 ->
 
+                        },
+                        showMessage = {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(it)
+                            }
                         }
                     )
                 }

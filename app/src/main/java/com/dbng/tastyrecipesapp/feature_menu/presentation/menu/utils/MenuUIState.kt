@@ -7,6 +7,6 @@ import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 
 sealed class MenuUIState {
     data object Loading : MenuUIState()
-    data class Success(val data: List<MenuItem>) : MenuUIState()
+    data object Success : MenuUIState()
     data class Error(val message: String) : MenuUIState()
 }
