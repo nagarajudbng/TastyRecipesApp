@@ -35,7 +35,7 @@ object MenuModule{
 
     @Provides
     @Singleton
-    fun provideMenuRepository(menuRemoteDataSource: MenuRemoteDataSource): com.dbng.domain.repository.MenuRepository {
+    fun provideMenuRepository(menuRemoteDataSource: MenuRemoteDataSource): MenuRepositoryImpl{
         return MenuRepositoryImpl(menuRemoteDataSource)
     }
 }

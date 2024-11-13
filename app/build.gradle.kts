@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(project(":presentation"))
+    implementation(project(":data"))
+    implementation(project(":core"))
     testImplementation(libs.junit)
 //    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     androidTestImplementation(libs.androidx.junit)

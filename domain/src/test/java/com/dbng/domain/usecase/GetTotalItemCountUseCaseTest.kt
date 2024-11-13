@@ -1,4 +1,4 @@
-package com.dbng.tastyrecipesapp.feature_menu.domain.usecase
+package com.dbng.domain.usecase
 
 import com.dbng.domain.repository.MenuRepository
 import kotlinx.coroutines.test.TestCoroutineDispatcher

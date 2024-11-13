@@ -1,4 +1,4 @@
-package com.dbng.tastyrecipesapp.feature_menu.domain.usecase
+package com.dbng.domain.usecase
 
 import com.dbng.core.domain.Resource
 import com.dbng.core.domain.utils.ResponseError

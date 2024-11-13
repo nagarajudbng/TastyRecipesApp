@@ -1,4 +1,4 @@
-package com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel
+package com.dbng.presentation.viewmodel
 
 import com.dbng.core.domain.Resource
 import com.dbng.core.domain.utils.ResponseError

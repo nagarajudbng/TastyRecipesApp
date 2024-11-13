@@ -1,8 +1,8 @@
-package com.dbng.tastyrecipesapp.feature_menu.data.datasource
+package com.dbng.data.datasource
 
-import com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse.MenuItem
-import com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse.MenuResponse
-import com.dbng.tastyrecipesapp.feature_menu.data.network.MenuApiService
+import com.dbng.data.model.menuresponse.MenuItem
+import com.dbng.data.model.menuresponse.MenuResponse
+import com.dbng.data.network.MenuApiService
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody

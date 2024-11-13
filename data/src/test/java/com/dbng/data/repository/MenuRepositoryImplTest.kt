@@ -1,12 +1,12 @@
-package com.dbng.tastyrecipesapp.feature_menu.data.repository
+package com.dbng.data.repository
 
 
 import com.dbng.core.domain.Resource
 import com.dbng.core.domain.utils.ResponseError
-import com.dbng.tastyrecipesapp.feature_menu.data.datasource.MenuRemoteDataSource
-import com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse.MenuItem
-import com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse.MenuResponse
-import com.dbng.tastyrecipesapp.feature_menu.data.network.MenuApiService
+import com.dbng.data.datasource.MenuRemoteDataSource
+import com.dbng.data.model.menuresponse.MenuItem
+import com.dbng.data.model.menuresponse.MenuResponse
+import com.dbng.data.network.MenuApiService
 import com.dbng.domain.repository.MenuRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
