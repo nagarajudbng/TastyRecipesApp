@@ -68,7 +68,7 @@ class MenuViewModel @Inject constructor(
             _menuState.value = MenuUIState.Loading
             when (val response = menuItemMoreInfoUseCase(itemID)) {
                 is Resource.Success -> {
-                    response.data?.let { item ->
+                    response.data?.let {
                         _detailItems.value = response.data
                         _menuState.value = MenuUIState.Success
                     }

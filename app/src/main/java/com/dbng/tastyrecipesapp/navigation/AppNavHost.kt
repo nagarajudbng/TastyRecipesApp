@@ -42,13 +42,6 @@ fun AppNavHost(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     Log.d("Navigator","Navigator AppNavHost")
-    var context = LocalContext.current;
-
-    var launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {
-        }
-    )
 
     Scaffold(
         snackbarHost = {

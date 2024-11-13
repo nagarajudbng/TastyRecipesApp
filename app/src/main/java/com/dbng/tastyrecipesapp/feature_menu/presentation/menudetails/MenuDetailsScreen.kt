@@ -80,7 +80,7 @@ fun MenuDetailsScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = title ?:"",
+                        text = title ,
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(
                             color = ThemeColors.textTopBarColor
@@ -165,25 +165,25 @@ fun ItemContent(
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = item?.description ?: "",
+            text = item.description ,
             fontSize = 16.sp,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Price: $${item?.price ?: 0}", fontSize = 18.sp)
+        Text(text = "Price: $${item.price ?: 0}", fontSize = 18.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Quantity: ${item?.quantity ?: ""}", fontSize = 16.sp)
+        Text(text = "Quantity: ${item.quantity }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Menu Type: ${item?.menuType ?: ""}", fontSize = 16.sp)
+        Text(text = "Menu Type: ${item.menuType }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Category: ${item?.category ?: ""}", fontSize = 16.sp)
+        Text(text = "Category: ${item.category }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Subcategory: ${item?.subCategory ?: ""}", fontSize = 16.sp)
+        Text(text = "Subcategory: ${item.subCategory }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Ingredients: ${item?.ingredients ?: ""}", fontSize = 16.sp)
+        Text(text = "Ingredients: ${item.ingredients }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Item Type: ${item?.itemType ?: ""}", fontSize = 16.sp)
+        Text(text = "Item Type: ${item.itemType }", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier

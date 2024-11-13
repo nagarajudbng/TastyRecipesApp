@@ -88,7 +88,7 @@ fun FoodItem(
 
                     }
                     Spacer(modifier = Modifier.height(5.dp))
-                    item.name?.let {
+                    item.name.let {
                         Text(
                             text = it,
                             modifier = Modifier.fillMaxWidth(),
