@@ -2,22 +2,17 @@ package com.dbng.tastyrecipesapp.feature_menu.domain.usecase
 
 import com.dbng.tastyrecipesapp.core.domain.Resource
 import com.dbng.tastyrecipesapp.core.domain.utils.ResponseError
-import com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse.MenuResponse
 import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 import com.dbng.tastyrecipesapp.feature_menu.domain.repository.MenuRepository
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
-import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.BDDMockito
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import retrofit2.Response
-import java.io.IOException
 
 // Created by Nagaraju on 13/11/24.
 
