@@ -78,9 +78,7 @@ class MenuViewModel @Inject constructor(
                         ResponseError.NetworkError -> "Network Error"
                         ResponseError.ServerError -> "Server Error"
                         ResponseError.UnknownError -> "Unknown Error"
-                        ResponseError.NoDataFoundError -> {
-                            "No More Data"
-                        }
+                        ResponseError.NoDataFoundError -> "No More Data"
                         null -> "Unknown Error"
                     }
                     _menuState.value = MenuUIState.Error(errorMessage)
