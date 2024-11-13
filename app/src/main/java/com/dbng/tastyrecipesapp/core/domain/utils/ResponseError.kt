@@ -7,5 +7,6 @@ sealed class ResponseError {
     data object NetworkError : ResponseError()
     data object ServerError : ResponseError()
     data object UnknownError : ResponseError()
+    data object NoDataFoundError : ResponseError()
 
 }

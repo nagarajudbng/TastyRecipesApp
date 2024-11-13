@@ -46,6 +46,7 @@ import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel.MenuVie
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import androidx.compose.animation.*
 
 @Preview
 @Composable
@@ -57,7 +58,7 @@ fun MenuScreenPreview() {
 @Composable
 fun MenuScreen(
     navController: NavHostController,
-    onNavigation: (String, Any?) -> Unit,
+    onNavigation: (String, String,String) -> Unit,
     showMessage: (String) -> Unit
 ) {
     val viewModel = hiltViewModel<MenuViewModel>()
@@ -116,8 +117,8 @@ fun MenuScreen(
                         listState = listState,
                         isLoading = viewModel.isLoading.value,
                         onEdit = {},
-                        onItemClick = {
-                            onNavigation("Details", it)
+                        onItemClick = { id,name ->
+                            onNavigation("Details", id,name)
                         },
                         showMessage = {
                             showMessage(it)
@@ -133,7 +134,7 @@ fun MenuScreen(
 fun ProductList(
     viewModel: MenuViewModel,
     onEdit: (String) -> Unit,
-    onItemClick: (String) -> Unit,
+    onItemClick: (String,String) -> Unit,
     loadMoreItems: () -> Unit,
     listState: LazyListState,
     isLoading: Boolean,
@@ -158,8 +159,7 @@ fun ProductList(
             }
     }
 
-    when (uiState) {
-        is MenuUIState.Loading -> {
+    if (uiState is MenuUIState.Loading) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -171,24 +171,29 @@ fun ProductList(
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             }
-        }
-
-        is MenuUIState.Success -> {
-            LazyColumn(
-                modifier = Modifier
-                    .background(colorResource(id = R.color.list_background))
-                    .padding(horizontal = 8.dp),
-                contentPadding = PaddingValues(6.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                state = listState
-            ) {
-                itemsIndexed(viewModel.items.value, key = { _, item -> item.id }) { _, item ->
-                    FoodItem(
-                        item,
-                        onEdit = { onEdit(it) },
-                        onItemClick = { onItemClick(it) }
-                    )
+    }
+    LazyColumn(
+        modifier = Modifier
+            .background(colorResource(id = R.color.list_background))
+            .padding(horizontal = 8.dp),
+        contentPadding = PaddingValues(6.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        state = listState
+    ) {
+        itemsIndexed(viewModel.items.value, key = { _, item -> item.id }) { _, item ->
+            FoodItem(
+                item,
+                onEdit = { onEdit(it) },
+                onItemClick = { id,name->
+                    onItemClick(id,name)
                 }
+            )
+        }
+        when (uiState) {
+            is MenuUIState.Loading -> {
+
+            }
+            is MenuUIState.Success -> {
                 if (isLoading) {
                     item {
                         Box(
@@ -202,10 +207,12 @@ fun ProductList(
                     }
                 }
             }
+
+            is MenuUIState.Error -> {
+                showMessage(((uiState as MenuUIState.Error).message))
+                viewModel.updateMenuUIState(MenuUIState.Success)
+            }
         }
 
-        is MenuUIState.Error -> {
-            showMessage("An error occurred. Please try again.")
-        }
     }
 }

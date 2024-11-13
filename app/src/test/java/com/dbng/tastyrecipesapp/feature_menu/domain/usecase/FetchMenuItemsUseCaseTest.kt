@@ -16,15 +16,15 @@ import org.mockito.MockitoAnnotations
 
 // Created by Nagaraju on 13/11/24.
 
-class MenuUseCaseTest {
+class FetchMenuItemsUseCaseTest {
     private lateinit var menuRepository: MenuRepository
-    private lateinit var menuUseCase: MenuUseCase
+    private lateinit var fetchMenuItemsUseCase: FetchMenuItemsUseCase
     private val testDispatcher = TestCoroutineDispatcher()
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         menuRepository = Mockito.mock(MenuRepository::class.java)
-        menuUseCase = MenuUseCase(menuRepository)
+        fetchMenuItemsUseCase = FetchMenuItemsUseCase(menuRepository)
     }
 
     @After
@@ -41,7 +41,7 @@ class MenuUseCaseTest {
             MenuItem(id = 1, name = "Burger", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
         )
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn(Resource.Success(mockMenuItems))
-        val useCaseResult = menuUseCase(from, size)
+        val useCaseResult = fetchMenuItemsUseCase(from, size)
         assert(useCaseResult is Resource.Success)
         Assert.assertEquals(2, (useCaseResult as Resource.Success).data?.size)
     }
@@ -65,7 +65,7 @@ class MenuUseCaseTest {
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn (
             Resource.Error(data = null, responseError= ResponseError.NetworkError)
         )
-        val useCaseResult = menuUseCase(from, size)
+        val useCaseResult = fetchMenuItemsUseCase(from, size)
         assert(useCaseResult is Resource.Error)
         Assert.assertEquals(
             ResponseError.NetworkError,
@@ -79,7 +79,7 @@ class MenuUseCaseTest {
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn (
             Resource.Error(data = null, responseError= ResponseError.ServerError)
         )
-        val useCaseResult = menuUseCase(from, size)
+        val useCaseResult = fetchMenuItemsUseCase(from, size)
         assert(useCaseResult is Resource.Error)
         Assert.assertEquals(
             ResponseError.ServerError,

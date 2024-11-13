@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -58,11 +61,21 @@ fun AppNavHost(
                 navController = navController,
                 startDestination = startDestination
             ) {
-                composable(NavigationItem.Menu.route) {
+                composable(NavigationItem.Menu.route, enterTransition = {
+                    return@composable fadeIn(tween(1000))
+                }, exitTransition = {
+                    return@composable slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left, tween(700)
+                    )
+                }, popEnterTransition = {
+                    return@composable slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                    )
+                }) {
                     MenuScreen(
                         navController = navController,
-                        onNavigation = { str, id ->
-                            navController.navigate("${NavigationItem.MenuDetails.route}/${id}")
+                        onNavigation = { str, id ,name->
+                            navController.navigate("${NavigationItem.MenuDetails.route}/${id}/${name}")
                         },
                         showMessage = {
                             scope.launch {
@@ -72,12 +85,28 @@ fun AppNavHost(
                     )
                 }
                 composable(
-                    "${NavigationItem.MenuDetails.route}/{itemID}",
-                    arguments = listOf(navArgument("itemID"){type= NavType.IntType})
-                ) { backStack ->
+                    "${NavigationItem.MenuDetails.route}/{itemID}/{name}",
+                    arguments = listOf(
+                        navArgument("itemID"){type= NavType.IntType},
+                        navArgument("name"){type= NavType.StringType},
+                        ),
+                    enterTransition = {
+                        return@composable slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                        )
+                    },
+                    popExitTransition = {
+                        return@composable slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                        )
+                    },
+
+                    ) { backStack ->
                     val userType = backStack.arguments?.getInt("itemID") ?: 0
+                    val name = backStack.arguments?.getString("name") ?: ""
                     MenuDetailsScreen(
                         navController,
+                        name,
                         userType,
                         onNavigation = {
                             navController.popBackStack()

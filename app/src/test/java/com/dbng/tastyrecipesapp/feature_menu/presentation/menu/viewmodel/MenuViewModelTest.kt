@@ -6,9 +6,8 @@ import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 import com.dbng.tastyrecipesapp.feature_menu.domain.repository.MenuRepository
 import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.GetTotalItemCountUseCase
 import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuItemMoreInfoUseCase
-import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuUseCase
+import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.FetchMenuItemsUseCase
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
-import com.nhaarman.mockitokotlin2.any
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -30,7 +29,7 @@ class MenuViewModelTest {
 
     private lateinit var viewModel: MenuViewModel
     private lateinit var repository: MenuRepository
-    private lateinit var menuUseCase: MenuUseCase
+    private lateinit var fetchMenuItemsUseCase: FetchMenuItemsUseCase
     private lateinit var getTotalItemCountUseCase: GetTotalItemCountUseCase
     private lateinit var menuItemMoreInfoUseCase: MenuItemMoreInfoUseCase
     private val testDispatcher = TestCoroutineDispatcher()
@@ -40,10 +39,10 @@ class MenuViewModelTest {
         Dispatchers.setMain(testDispatcher)
         MockitoAnnotations.initMocks(this)
         repository = mock(MenuRepository::class.java)
-        menuUseCase = MenuUseCase(repository)
+        fetchMenuItemsUseCase = FetchMenuItemsUseCase(repository)
         getTotalItemCountUseCase = GetTotalItemCountUseCase(repository)
         menuItemMoreInfoUseCase = MenuItemMoreInfoUseCase(repository)
-        viewModel = MenuViewModel(menuUseCase, getTotalItemCountUseCase, menuItemMoreInfoUseCase)
+        viewModel = MenuViewModel(fetchMenuItemsUseCase, getTotalItemCountUseCase, menuItemMoreInfoUseCase)
     }
 
     @After
@@ -86,7 +85,7 @@ class MenuViewModelTest {
             MenuItem(id = 1, name = "Pizza", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
             MenuItem(id = 1, name = "Burger", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
         )
-        `when`(menuUseCase(from,size)).thenReturn(Resource.Success(mockMenuItems))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Success(mockMenuItems))
         viewModel.fetchMenuList()
         assertEquals(MenuUIState.Success, viewModel.menuState.value)
         assertEquals(mockMenuItems, viewModel.items.value)
@@ -95,7 +94,7 @@ class MenuViewModelTest {
     fun `fetchMenuList return failure with IOException`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(menuUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.NetworkError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.NetworkError))
         viewModel.fetchMenuList()
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
         assertEquals("Network Error", (viewModel.menuState.value as MenuUIState.Error).message)
@@ -105,7 +104,7 @@ class MenuViewModelTest {
     fun `fetchMenuList return failure with HttpException`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(menuUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.ServerError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.ServerError))
         viewModel.fetchMenuList()
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
         assertEquals("Server Error", (viewModel.menuState.value as MenuUIState.Error).message)
@@ -116,7 +115,7 @@ class MenuViewModelTest {
     fun `fetchMenuList return failure`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(menuUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.UnknownError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.UnknownError))
         viewModel.fetchMenuList()
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
         assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
@@ -126,7 +125,7 @@ class MenuViewModelTest {
     fun `fetchMenuList return none`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(menuUseCase(from,size)).thenReturn(Resource.Error(null,responseError = null))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = null))
         viewModel.fetchMenuList()
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
         assertEquals(null, (viewModel.menuState.value as MenuUIState.Error).message)

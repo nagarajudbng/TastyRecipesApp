@@ -1,9 +1,6 @@
 package com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dbng.tastyrecipesapp.core.domain.Resource
@@ -11,16 +8,17 @@ import com.dbng.tastyrecipesapp.core.domain.utils.ResponseError
 import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.GetTotalItemCountUseCase
 import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuItemMoreInfoUseCase
-import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuUseCase
+import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.FetchMenuItemsUseCase
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(
-    private val menuUseCase: MenuUseCase,
+    private val fetchMenuItemsUseCase: FetchMenuItemsUseCase,
     private val getTotalItemCountUseCase: GetTotalItemCountUseCase,
     private val menuItemMoreInfoUseCase: MenuItemMoreInfoUseCase
 ) : ViewModel() {
@@ -35,28 +33,27 @@ class MenuViewModel @Inject constructor(
 
     private var currentIndex = 0
     private var pageSize = 20
-    private var totalItemsCount = 0
+
     fun fetchMenuList() {
         viewModelScope.launch {
-            if(totalItemsCount> 0 && _items.value.size>=totalItemsCount) return@launch
             isLoading.value = true
             try {
-                when (val response = menuUseCase(currentIndex, pageSize)) {
+                val response = async {  fetchMenuItemsUseCase(currentIndex, pageSize)}.await()
+                when (response) {
                     is Resource.Success -> {
                         val newItems = response.data ?: emptyList()
-                        _items.value = newItems.toPersistentList()
+                        _items.value = (_items.value+newItems.toList()).toPersistentList()
                         _menuState.value = MenuUIState.Success
-
-                        // Update indices and counts for pagination
                         currentIndex = _items.value.size
-                        totalItemsCount = getTotalItemCountUseCase()
                     }
                     is Resource.Error -> {
                         val errorMessage = when (response.responseError) {
                             ResponseError.NetworkError -> "Network Error"
                             ResponseError.ServerError -> "Server Error"
                             ResponseError.UnknownError -> "Unknown Error"
+                            ResponseError.NoDataFoundError -> "No More Data"
                             null -> "Unknown Error"
+
                         }
                         _menuState.value = MenuUIState.Error(errorMessage)
                     }
@@ -68,6 +65,7 @@ class MenuViewModel @Inject constructor(
     }
     fun fetchMenuItemDetails(itemID: Int) {
         viewModelScope.launch {
+            _menuState.value = MenuUIState.Loading
             when (val response = menuItemMoreInfoUseCase(itemID)) {
                 is Resource.Success -> {
                     response.data?.let { item ->
@@ -80,11 +78,18 @@ class MenuViewModel @Inject constructor(
                         ResponseError.NetworkError -> "Network Error"
                         ResponseError.ServerError -> "Server Error"
                         ResponseError.UnknownError -> "Unknown Error"
+                        ResponseError.NoDataFoundError -> {
+                            "No More Data"
+                        }
                         null -> "Unknown Error"
                     }
                     _menuState.value = MenuUIState.Error(errorMessage)
                 }
             }
         }
+    }
+
+    fun updateMenuUIState(success: MenuUIState.Success) {
+        _menuState.value = success
     }
 }

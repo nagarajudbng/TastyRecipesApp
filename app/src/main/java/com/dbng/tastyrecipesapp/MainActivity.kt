@@ -17,7 +17,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.dbng.tastyrecipesapp.navigation.AppNavHost
-import com.dbng.tastyrecipesapp.navigation.MyAnimatedNavHost
 import com.dbng.tastyrecipesapp.ui.theme.TastyRecipesAppTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import dagger.hilt.android.AndroidEntryPoint

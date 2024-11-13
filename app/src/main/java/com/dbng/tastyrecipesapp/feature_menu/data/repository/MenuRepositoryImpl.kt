@@ -22,7 +22,7 @@ class MenuRepositoryImpl(
                 menuItemsCount = response.body()?.count?:0
                 val newItems = response.body()?.results?.map { it.toDomain() } ?: emptyList()
                 allMenuItems.addAll(newItems)
-                Resource.Success(data = allMenuItems.toList())
+                Resource.Success(data = newItems.toList())
             }
             else {
                 Resource.Error(data = null,responseError = ResponseError.UnknownError)

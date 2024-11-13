@@ -52,12 +52,12 @@ fun FoodItemPreview() {
 fun FoodItem(
     item: MenuItem,
     onEdit:(String) -> Unit,
-    onItemClick:(String)->Unit
+    onItemClick:(String,String)->Unit
 ) {
     Card(
         modifier = Modifier.fillMaxSize(),
         onClick = {
-            onItemClick(item.id.toString())
+            onItemClick(item.id.toString(),item.name)
         },
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
