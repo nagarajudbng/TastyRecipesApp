@@ -24,7 +24,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideOkHttpClient(sharedPreferences: SharedPreferences): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor {
                 val modifiedRequest = it.request().newBuilder()
@@ -80,24 +80,4 @@ object AppModule {
     fun provideGson(): Gson {
         return Gson()
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideImageLoader(context: Context, sharedPreferences: SharedPreferences): ImageLoader {
-//        val token = sharedPreferences.getString(Constants.KEY_JWT_TOKEN, "")
-//        val client = OkHttpClient.Builder()
-//            .addInterceptor { chain ->
-//                val newRequest: Request = chain.request().newBuilder()
-//                    .addHeader("Authorization", "Bearer $token")
-//                    .build()
-//                chain.proceed(newRequest)
-//            }
-//            .build()
-//
-//        return ImageLoader.Builder(context)
-//            .okHttpClient(client)
-//            .crossfade(true)
-//            .diskCachePolicy(CachePolicy.ENABLED) // Change as needed
-//            .build()
-//    }
 }
