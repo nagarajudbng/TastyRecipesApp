@@ -6,11 +6,12 @@ import com.dbng.tastyrecipesapp.feature_menu.data.network.MenuApiService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
 
 // Created by Nagaraju on 11/11/24.
 
-class MenuRemoteDataSource(
+class MenuRemoteDataSource @Inject constructor(
     private val menuApiService: MenuApiService,
     private val ioDispatcher: CoroutineDispatcher
 ) {

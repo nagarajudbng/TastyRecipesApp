@@ -12,7 +12,7 @@ import java.io.IOException
 class MenuRepositoryImpl(
     private val menuRemoteDataSource: MenuRemoteDataSource
 ) : MenuRepository {
-    var menuItemsCount = 0
+    private var menuItemsCount = 0
     private val allMenuItems = mutableListOf<com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem>()
 
     override suspend fun fetchMenuItems(from: Int, size: Int): Resource<List<com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem>> {
@@ -23,24 +23,6 @@ class MenuRepositoryImpl(
                 val newItems = response.body()?.results?.map { it.toDomain() } ?: emptyList()
                 allMenuItems.addAll(newItems)
                 Resource.Success(data = allMenuItems.toList())
-            }
-            else {
-                Resource.Error(data = null,responseError = ResponseError.UnknownError)
-            }
-        } catch(e: IOException) {
-            Resource.Error(data = null,responseError = ResponseError.NetworkError)
-        } catch(e: HttpException) {
-            Resource.Error(data = null,responseError = ResponseError.ServerError)
-        }
-    }
-
-    override suspend fun fetchMenuItemMoreInfo(itemID:Int): Resource<com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem> {
-        return try{
-            val response = menuRemoteDataSource.fetchMenuItemMoreInfo(itemID)
-            var resource: Resource.Success<MenuItem>? = null
-            if(response.isSuccessful){
-                resource = Resource.Success(data= response.body())
-                Resource.Success(data= resource.data?.toDomain())
             }
             else {
                 Resource.Error(data = null,responseError = ResponseError.UnknownError)

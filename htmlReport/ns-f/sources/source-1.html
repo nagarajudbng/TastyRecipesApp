@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MenuViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: MenuViewModel (com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MenuViewModel$fetchMenuItemDetails$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MenuViewModel$fetchMenuList$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/46)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.dbng.tastyrecipesapp.feature_menu.presentation.menu.viewmodel
+&nbsp;
+&nbsp;import androidx.compose.runtime.getValue
+&nbsp;import androidx.compose.runtime.mutableStateOf
+&nbsp;import androidx.compose.runtime.remember
+&nbsp;import androidx.compose.runtime.setValue
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import com.dbng.tastyrecipesapp.core.domain.Resource
+&nbsp;import com.dbng.tastyrecipesapp.core.domain.utils.ResponseError
+&nbsp;import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
+&nbsp;import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.GetTotalItemCountUseCase
+&nbsp;import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuItemMoreInfoUseCase
+&nbsp;import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuUseCase
+&nbsp;import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
+&nbsp;import dagger.hilt.android.lifecycle.HiltViewModel
+&nbsp;import kotlinx.collections.immutable.PersistentList
+&nbsp;import kotlinx.collections.immutable.toPersistentList
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;import javax.inject.Inject
+&nbsp;@HiltViewModel
+&nbsp;class MenuViewModel @Inject constructor(
+<b class="nc">&nbsp;    private val menuUseCase: MenuUseCase,</b>
+<b class="nc">&nbsp;    private val getTotalItemCountUseCase: GetTotalItemCountUseCase,</b>
+<b class="nc">&nbsp;    private val menuItemMoreInfoUseCase: MenuItemMoreInfoUseCase</b>
+<b class="nc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="nc">&nbsp;    private val _menuState = mutableStateOf&lt;MenuUIState&gt;(MenuUIState.Loading)</b>
+<b class="nc">&nbsp;    val menuState = _menuState</b>
+<b class="nc">&nbsp;    private val _items = mutableStateOf&lt;PersistentList&lt;MenuItem&gt;&gt;(emptyList&lt;MenuItem&gt;().toPersistentList())</b>
+<b class="nc">&nbsp;    val items = _items</b>
+<b class="nc">&nbsp;    private val _detailItems = mutableStateOf&lt;MenuItem?&gt;(null)</b>
+<b class="nc">&nbsp;    val detailItems = _detailItems</b>
+<b class="nc">&nbsp;    var isLoading = mutableStateOf(false)</b>
+&nbsp;
+&nbsp;    private var currentIndex = 0
+<b class="nc">&nbsp;    private var pageSize = 20</b>
+&nbsp;    private var totalItemsCount = 0
+&nbsp;    fun fetchMenuList() {
+<b class="nc">&nbsp;        viewModelScope.launch {</b>
+<b class="nc">&nbsp;            if(totalItemsCount&gt; 0 &amp;&amp; _items.value.size&gt;=totalItemsCount) return@launch</b>
+<b class="nc">&nbsp;            isLoading.value = true</b>
+<b class="nc">&nbsp;            try {</b>
+<b class="nc">&nbsp;                when (val response = menuUseCase(currentIndex, pageSize)) {</b>
+<b class="nc">&nbsp;                    is Resource.Success -&gt; {</b>
+<b class="nc">&nbsp;                        val newItems = response.data ?: emptyList()</b>
+<b class="nc">&nbsp;                        _items.value = newItems.toPersistentList()</b>
+<b class="nc">&nbsp;                        _menuState.value = MenuUIState.Success</b>
+&nbsp;
+&nbsp;                        // Update indices and counts for pagination
+<b class="nc">&nbsp;                        currentIndex = _items.value.size</b>
+<b class="nc">&nbsp;                        totalItemsCount = getTotalItemCountUseCase()</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    is Resource.Error -&gt; {</b>
+<b class="nc">&nbsp;                        val errorMessage = when (response.responseError) {</b>
+<b class="nc">&nbsp;                            ResponseError.NetworkError -&gt; &quot;Network Error&quot;</b>
+<b class="nc">&nbsp;                            ResponseError.ServerError -&gt; &quot;Server Error&quot;</b>
+<b class="nc">&nbsp;                            ResponseError.UnknownError -&gt; &quot;Unknown Error&quot;</b>
+<b class="nc">&nbsp;                            null -&gt; &quot;Unknown Error&quot;</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                        _menuState.value = MenuUIState.Error(errorMessage)</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            } finally {
+<b class="nc">&nbsp;                isLoading.value = false</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    fun fetchMenuItemDetails(itemID: Int) {
+<b class="nc">&nbsp;        viewModelScope.launch {</b>
+<b class="nc">&nbsp;            when (val response = menuItemMoreInfoUseCase(itemID)) {</b>
+<b class="nc">&nbsp;                is Resource.Success -&gt; {</b>
+<b class="nc">&nbsp;                    response.data?.let { item -&gt;</b>
+<b class="nc">&nbsp;                        _detailItems.value = response.data</b>
+<b class="nc">&nbsp;                        _menuState.value = MenuUIState.Success</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;                }
+<b class="nc">&nbsp;                is Resource.Error -&gt; {</b>
+<b class="nc">&nbsp;                    val errorMessage = when (response.responseError) {</b>
+<b class="nc">&nbsp;                        ResponseError.NetworkError -&gt; &quot;Network Error&quot;</b>
+<b class="nc">&nbsp;                        ResponseError.ServerError -&gt; &quot;Server Error&quot;</b>
+<b class="nc">&nbsp;                        ResponseError.UnknownError -&gt; &quot;Unknown Error&quot;</b>
+<b class="nc">&nbsp;                        null -&gt; &quot;Unknown Error&quot;</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                    _menuState.value = MenuUIState.Error(errorMessage)</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-13 14:10</div>
+</div>
+</body>
+</html>

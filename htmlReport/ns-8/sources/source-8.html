@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MenuItem</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse</a>
+</div>
+
+<h1>Coverage Summary for Class: MenuItem (com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuItem</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (55/55)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.dbng.tastyrecipesapp.feature_menu.data.model.menuresponse
+&nbsp;
+&nbsp;import com.google.gson.annotations.SerializedName
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;data class MenuItem (</b>
+&nbsp;
+<b class="fc">&nbsp;  @SerializedName(&quot;approved_at&quot;              ) var approvedAt            : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;aspect_ratio&quot;             ) var aspectRatio           : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;beauty_url&quot;               ) var beautyUrl             : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;brand&quot;                    ) var brand                 : Brand?                 = Brand(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;brand_id&quot;                 ) var brandId               : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;buzz_id&quot;                  ) var buzzId                : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;canonical_id&quot;             ) var canonicalId           : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;compilations&quot;             ) var compilations          : ArrayList&lt;Compilations&gt; = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;cook_time_minutes&quot;        ) var cookTimeMinutes       : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;country&quot;                  ) var country               : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;created_at&quot;               ) var createdAt             : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;credits&quot;                  ) var credits               : ArrayList&lt;Credits&gt;      = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;description&quot;              ) var description           : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;draft_status&quot;             ) var draftStatus           : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;facebook_posts&quot;           ) var facebookPosts         : ArrayList&lt;String&gt;       = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;id&quot;                       ) var id                    : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;inspired_by_url&quot;          ) var inspiredByUrl         : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;instructions&quot;             ) var instructions          : ArrayList&lt;Instructions&gt; = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;is_app_only&quot;              ) var isAppOnly             : Boolean?                = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;is_one_top&quot;               ) var isOneTop              : Boolean?                = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;is_shoppable&quot;             ) var isShoppable           : Boolean?                = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;is_subscriber_content&quot;    ) var isSubscriberContent   : Boolean?                = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;keywords&quot;                 ) var keywords              : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;language&quot;                 ) var language              : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;name&quot;                     ) var name                  : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;num_servings&quot;             ) var numServings           : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;nutrition&quot;                ) var nutrition             : Nutrition?              = Nutrition(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;nutrition_visibility&quot;     ) var nutritionVisibility   : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;original_video_url&quot;       ) var originalVideoUrl      : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;prep_time_minutes&quot;        ) var prepTimeMinutes       : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;price&quot;                    ) var price                 : Price?                  = Price(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;promotion&quot;                ) var promotion             : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;renditions&quot;               ) var renditions            : ArrayList&lt;Renditions&gt;   = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;sections&quot;                 ) var sections              : ArrayList&lt;Sections&gt;     = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;seo_path&quot;                 ) var seoPath               : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;seo_title&quot;                ) var seoTitle              : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;servings_noun_plural&quot;     ) var servingsNounPlural    : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;servings_noun_singular&quot;   ) var servingsNounSingular  : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;show&quot;                     ) var show                  : Show?                   = Show(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;show_id&quot;                  ) var showId                : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;slug&quot;                     ) var slug                  : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;tags&quot;                     ) var tags                  : ArrayList&lt;Tags&gt;         = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;thumbnail_alt_text&quot;       ) var thumbnailAltText      : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;thumbnail_url&quot;            ) var thumbnailUrl          : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;tips_and_ratings_enabled&quot; ) var tipsAndRatingsEnabled : Boolean?                = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;topics&quot;                   ) var topics                : ArrayList&lt;Topics&gt;       = arrayListOf(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;total_time_minutes&quot;       ) var totalTimeMinutes      : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;total_time_tier&quot;          ) var totalTimeTier         : TotalTimeTier?          = TotalTimeTier(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;updated_at&quot;               ) var updatedAt             : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;user_ratings&quot;             ) var userRatings           : UserRatings?            = UserRatings(),</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;video_ad_content&quot;         ) var videoAdContent        : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;video_id&quot;                 ) var videoId               : Int?                    = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;video_url&quot;                ) var videoUrl              : String?                 = null,</b>
+<b class="fc">&nbsp;  @SerializedName(&quot;yields&quot;                   ) var yields                : String?                 = null</b>
+&nbsp;)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-13 14:10</div>
+</div>
+</body>
+</html>
