@@ -1,9 +1,9 @@
 package com.dbng.tastyrecipesapp.feature_menu.domain.usecase
 
-import com.dbng.tastyrecipesapp.core.domain.Resource
-import com.dbng.tastyrecipesapp.core.domain.utils.ResponseError
-import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
-import com.dbng.tastyrecipesapp.feature_menu.domain.repository.MenuRepository
+import com.dbng.core.domain.Resource
+import com.dbng.core.domain.utils.ResponseError
+import com.dbng.domain.model.MenuItem
+import com.dbng.domain.repository.MenuRepository
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
@@ -18,14 +18,14 @@ import org.mockito.MockitoAnnotations
 // Created by Nagaraju on 13/11/24.
 
 class FetchMenuItemsUseCaseTest {
-    private lateinit var menuRepository: MenuRepository
-    private lateinit var fetchMenuItemsUseCase: FetchMenuItemsUseCase
+    private lateinit var menuRepository: com.dbng.domain.repository.MenuRepository
+    private lateinit var fetchMenuItemsUseCase: com.dbng.domain.usecase.FetchMenuItemsUseCase
     private val testDispatcher = TestCoroutineDispatcher()
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        menuRepository = Mockito.mock(MenuRepository::class.java)
-        fetchMenuItemsUseCase = FetchMenuItemsUseCase(menuRepository)
+        menuRepository = Mockito.mock(com.dbng.domain.repository.MenuRepository::class.java)
+        fetchMenuItemsUseCase = com.dbng.domain.usecase.FetchMenuItemsUseCase(menuRepository)
     }
 
     @After
@@ -38,13 +38,37 @@ class FetchMenuItemsUseCaseTest {
         val from = 0
         val size = 20
         val mockMenuItems = listOf(
-            MenuItem(id = 1, name = "Pizza", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
-            MenuItem(id = 1, name = "Burger", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
+            com.dbng.domain.model.MenuItem(
+                id = 1,
+                name = "Pizza",
+                imageURL = "url",
+                description = "test",
+                price = 20,
+                quantity = 1,
+                menuType = "a",
+                category = "b",
+                subCategory = "c",
+                itemType = "d",
+                ingredients = "e"
+            ),
+            com.dbng.domain.model.MenuItem(
+                id = 1,
+                name = "Burger",
+                imageURL = "url",
+                description = "test",
+                price = 20,
+                quantity = 1,
+                menuType = "a",
+                category = "b",
+                subCategory = "c",
+                itemType = "d",
+                ingredients = "e"
+            ),
         )
-        whenever(menuRepository.fetchMenuItems(from, size)).thenReturn(Resource.Success(mockMenuItems))
+        whenever(menuRepository.fetchMenuItems(from, size)).thenReturn(com.dbng.core.domain.Resource.Success(mockMenuItems))
         val useCaseResult = fetchMenuItemsUseCase(from, size)
-        assert(useCaseResult is Resource.Success)
-        Assert.assertEquals(2, (useCaseResult as Resource.Success).data?.size)
+        assert(useCaseResult is com.dbng.core.domain.Resource.Success)
+        Assert.assertEquals(2, (useCaseResult as com.dbng.core.domain.Resource.Success).data?.size)
     }
 
     @Test
@@ -52,11 +76,11 @@ class FetchMenuItemsUseCaseTest {
         val from = 0
         val size = 20
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn(
-            Resource.Error(data = null, responseError= ResponseError.UnknownError
+            com.dbng.core.domain.Resource.Error(data = null, responseError= com.dbng.core.domain.utils.ResponseError.UnknownError
             ))
         val response = menuRepository.fetchMenuItems(from, size)
-        assert(response is Resource.Error)
-        Assert.assertEquals(ResponseError.UnknownError, (response as Resource.Error).responseError)
+        assert(response is com.dbng.core.domain.Resource.Error)
+        Assert.assertEquals(com.dbng.core.domain.utils.ResponseError.UnknownError, (response as com.dbng.core.domain.Resource.Error).responseError)
     }
 
     @Test
@@ -64,13 +88,13 @@ class FetchMenuItemsUseCaseTest {
         val from = 0
         val size = 20
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn (
-            Resource.Error(data = null, responseError= ResponseError.NetworkError)
+            com.dbng.core.domain.Resource.Error(data = null, responseError= com.dbng.core.domain.utils.ResponseError.NetworkError)
         )
         val useCaseResult = fetchMenuItemsUseCase(from, size)
-        assert(useCaseResult is Resource.Error)
+        assert(useCaseResult is com.dbng.core.domain.Resource.Error)
         Assert.assertEquals(
-            ResponseError.NetworkError,
-            (useCaseResult as Resource.Error).responseError
+            com.dbng.core.domain.utils.ResponseError.NetworkError,
+            (useCaseResult as com.dbng.core.domain.Resource.Error).responseError
         )
     }
     @Test
@@ -78,13 +102,13 @@ class FetchMenuItemsUseCaseTest {
         val from = 0
         val size = 20
         whenever(menuRepository.fetchMenuItems(from, size)).thenReturn (
-            Resource.Error(data = null, responseError= ResponseError.ServerError)
+            com.dbng.core.domain.Resource.Error(data = null, responseError= com.dbng.core.domain.utils.ResponseError.ServerError)
         )
         val useCaseResult = fetchMenuItemsUseCase(from, size)
-        assert(useCaseResult is Resource.Error)
+        assert(useCaseResult is com.dbng.core.domain.Resource.Error)
         Assert.assertEquals(
-            ResponseError.ServerError,
-            (useCaseResult as Resource.Error).responseError
+            com.dbng.core.domain.utils.ResponseError.ServerError,
+            (useCaseResult as com.dbng.core.domain.Resource.Error).responseError
         )
     }
 
@@ -94,6 +118,6 @@ class FetchMenuItemsUseCaseTest {
 
         val result = fetchMenuItemsUseCase(11, 5)
 
-        assertEquals(ResponseError.NoDataFoundError, (result as Resource.Error).responseError)
+        assertEquals(com.dbng.core.domain.utils.ResponseError.NoDataFoundError, (result as com.dbng.core.domain.Resource.Error).responseError)
     }
 }

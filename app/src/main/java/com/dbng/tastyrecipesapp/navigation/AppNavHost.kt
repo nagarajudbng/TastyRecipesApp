@@ -22,8 +22,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.ui.MenuScreen
-import com.dbng.tastyrecipesapp.feature_menu.presentation.menudetails.MenuDetailsScreen
+import com.dbng.presentation.ui.menu.ui.MenuScreen
+import com.dbng.presentation.ui.menudetails.MenuDetailsScreen
 import kotlinx.coroutines.launch
 
 enum class MenuType{
@@ -72,9 +72,9 @@ fun AppNavHost(
                         AnimatedContentTransitionScope.SlideDirection.End, tween(700)
                     )
                 }) {
-                    MenuScreen(
+                   MenuScreen(
                         navController = navController,
-                        onNavigation = { str, id ,name->
+                        onNavigation = { str, id, name ->
                             navController.navigate("${NavigationItem.MenuDetails.route}/${id}/${name}")
                         },
                         showMessage = {
