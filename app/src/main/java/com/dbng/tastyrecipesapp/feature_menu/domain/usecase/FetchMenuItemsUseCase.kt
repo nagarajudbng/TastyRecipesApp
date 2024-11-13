@@ -9,7 +9,7 @@ import javax.inject.Inject
 class  FetchMenuItemsUseCase @Inject constructor(
     private val repository : MenuRepository
 ) {
-    private var totalItemsCount = 0
+    var totalItemsCount = 0
     suspend operator fun invoke(from: Int, size: Int): Resource<List<MenuItem>> {
         if (totalItemsCount > 0 && from >= totalItemsCount) {
             return Resource.Error(null,responseError = ResponseError.NoDataFoundError)

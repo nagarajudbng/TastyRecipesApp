@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -85,5 +86,14 @@ class FetchMenuItemsUseCaseTest {
             ResponseError.ServerError,
             (useCaseResult as Resource.Error).responseError
         )
+    }
+
+    @Test
+    fun `invoke NoDataFoundError when greater totalItemsCount`() = runTest (testDispatcher){
+        fetchMenuItemsUseCase.totalItemsCount = 10
+
+        val result = fetchMenuItemsUseCase(11, 5)
+
+        assertEquals(ResponseError.NoDataFoundError, (result as Resource.Error).responseError)
     }
 }
