@@ -15,3 +15,11 @@
 local.properties
 .idea/appInsightsSettings.xml
 .idea
+
+# Ignore Dagger generated files
+build/generated/source/kapt/ # Ignore generated sources for Java or Kotlin (Dagger, Room, etc.)
+build/generated/source/apt/   # Ignore annotation processing for Java sources
+build/generated/source/annotationProcessor/ # Annotation Processor sources for some setups
+build/
+
+htmlReport/
