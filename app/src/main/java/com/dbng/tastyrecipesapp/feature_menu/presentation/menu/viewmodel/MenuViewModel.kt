@@ -25,7 +25,7 @@ class MenuViewModel @Inject constructor(
 
     private val _menuState = mutableStateOf<MenuUIState>(MenuUIState.Loading)
     val menuState = _menuState
-    private val _items = mutableStateOf<PersistentList<MenuItem>>(emptyList<MenuItem>().toPersistentList())
+    private val _items = mutableStateOf<List<MenuItem>>(emptyList<MenuItem>())
     val items = _items
     private val _detailItems = mutableStateOf<MenuItem?>(null)
     val detailItems = _detailItems
@@ -42,7 +42,7 @@ class MenuViewModel @Inject constructor(
                 when (response) {
                     is Resource.Success -> {
                         val newItems = response.data ?: emptyList()
-                        _items.value = (_items.value+newItems.toList()).toPersistentList()
+                        _items.value = (_items.value+newItems.toList())
                         _menuState.value = MenuUIState.Success
                         currentIndex = _items.value.size
                     }

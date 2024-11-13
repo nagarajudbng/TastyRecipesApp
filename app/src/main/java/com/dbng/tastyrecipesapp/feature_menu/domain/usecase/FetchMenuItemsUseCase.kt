@@ -11,7 +11,7 @@ class  FetchMenuItemsUseCase @Inject constructor(
 ) {
     private var totalItemsCount = 0
     suspend operator fun invoke(from: Int, size: Int): Resource<List<MenuItem>> {
-        if (totalItemsCount > 0 && from >= 50) {
+        if (totalItemsCount > 0 && from >= totalItemsCount) {
             return Resource.Error(null,responseError = ResponseError.NoDataFoundError)
         }
 

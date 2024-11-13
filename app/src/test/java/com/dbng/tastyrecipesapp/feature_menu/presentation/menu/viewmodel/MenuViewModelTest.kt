@@ -128,8 +128,17 @@ class MenuViewModelTest {
         `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = null))
         viewModel.fetchMenuList()
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
-        assertEquals(null, (viewModel.menuState.value as MenuUIState.Error).message)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
+    }
 
+    @Test
+    fun `fetchMenuList return NoDataFoundError`() = runTest(testDispatcher) {
+        val from = 0
+        val size = 20
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.NoDataFoundError))
+        viewModel.fetchMenuList()
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("No More Data", (viewModel.menuState.value as MenuUIState.Error).message)
     }
 
 
@@ -176,7 +185,20 @@ class MenuViewModelTest {
         `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = null))
         viewModel.fetchMenuItemDetails(itemID)
         assertTrue(viewModel.menuState.value is MenuUIState.Error)
-        assertEquals(null, (viewModel.menuState.value as MenuUIState.Error).message)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
+    }
+    @Test
+    fun `fetchMenuItemDetails return NoDataFoundError`() = runTest(testDispatcher) {
+        var itemID = 123
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = ResponseError.NoDataFoundError))
+        viewModel.fetchMenuItemDetails(itemID)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("No More Data", (viewModel.menuState.value as MenuUIState.Error).message)
+    }
 
+    @Test
+    fun `updateMenuUIState update Success`()= runTest(testDispatcher) {
+        viewModel.updateMenuUIState(MenuUIState.Success)
+        assertEquals(MenuUIState.Success, viewModel.menuState.value)
     }
 }

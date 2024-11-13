@@ -142,6 +142,7 @@ fun ProductList(
     showMessage: (String) -> Unit,
 ) {
     val uiState by viewModel.menuState
+    val list = viewModel.items.value
     val shouldLoadMore = remember {
         derivedStateOf {
             val totalItemsCount = listState.layoutInfo.totalItemsCount
@@ -180,9 +181,18 @@ fun ProductList(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = listState
     ) {
-        itemsIndexed(viewModel.items.value, key = { _, item -> item.id }) { _, item ->
+//        itemsIndexed(viewModel.items.value, key = { _, item -> item.id }) { _, item ->
+//            FoodItem(
+//                item,
+//                onEdit = { onEdit(it) },
+//                onItemClick = { id,name->
+//                    onItemClick(id,name)
+//                }
+//            )
+//        }
+        items(list.size) { item ->
             FoodItem(
-                item,
+                list.get(item),
                 onEdit = { onEdit(it) },
                 onItemClick = { id,name->
                     onItemClick(id,name)
