@@ -1,8 +1,5 @@
 package com.dbng.domain.usecase
 
-import com.dbng.core.domain.Resource
-import com.dbng.core.domain.utils.ResponseError
-import com.dbng.domain.model.MenuItem
 import com.dbng.domain.repository.MenuRepository
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -17,15 +14,15 @@ import org.mockito.MockitoAnnotations
 // Created by Nagaraju on 13/11/24.
 
 class MenuItemMoreInfoUseCaseTest {
-    private lateinit var menuRepository: com.dbng.domain.repository.MenuRepository
-    private lateinit var menuUseCase: com.dbng.domain.usecase.MenuItemMoreInfoUseCase
+    private lateinit var menuRepository: MenuRepository
+    private lateinit var menuUseCase:MenuItemMoreInfoUseCase
     private val testDispatcher = TestCoroutineDispatcher()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        menuRepository = Mockito.mock(com.dbng.domain.repository.MenuRepository::class.java)
-        menuUseCase = com.dbng.domain.usecase.MenuItemMoreInfoUseCase(menuRepository)
+        menuRepository = Mockito.mock(MenuRepository::class.java)
+        menuUseCase =MenuItemMoreInfoUseCase(menuRepository)
     }
 
     @After

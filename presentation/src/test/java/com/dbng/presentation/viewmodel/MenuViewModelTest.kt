@@ -2,14 +2,11 @@ package com.dbng.presentation.viewmodel
 
 import com.dbng.core.domain.Resource
 import com.dbng.core.domain.utils.ResponseError
-import com.dbng.domain.model.MenuItem
-import com.dbng.domain.repository.MenuRepository
-import com.dbng.domain.usecase.GetTotalItemCountUseCase
-import com.dbng.domain.usecase.MenuItemMoreInfoUseCase
-import com.dbng.domain.usecase.FetchMenuItemsUseCase
 import com.dbng.presentation.ui.menu.utils.MenuUIState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -25,12 +22,13 @@ import org.mockito.MockitoAnnotations
 
 // Created by Nagaraju on 13/11/24.
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MenuViewModelTest {
+
 
     private lateinit var viewModel: com.dbng.presentation.ui.menu.viewmodel.MenuViewModel
     private lateinit var repository: com.dbng.domain.repository.MenuRepository
     private lateinit var fetchMenuItemsUseCase: com.dbng.domain.usecase.FetchMenuItemsUseCase
-    private lateinit var getTotalItemCountUseCase: com.dbng.domain.usecase.GetTotalItemCountUseCase
     private lateinit var menuItemMoreInfoUseCase: com.dbng.domain.usecase.MenuItemMoreInfoUseCase
     private val testDispatcher = TestCoroutineDispatcher()
 
@@ -40,11 +38,9 @@ class MenuViewModelTest {
         MockitoAnnotations.initMocks(this)
         repository = mock(com.dbng.domain.repository.MenuRepository::class.java)
         fetchMenuItemsUseCase = com.dbng.domain.usecase.FetchMenuItemsUseCase(repository)
-        getTotalItemCountUseCase = com.dbng.domain.usecase.GetTotalItemCountUseCase(repository)
         menuItemMoreInfoUseCase = com.dbng.domain.usecase.MenuItemMoreInfoUseCase(repository)
         viewModel = com.dbng.presentation.ui.menu.viewmodel.MenuViewModel(
             fetchMenuItemsUseCase,
-            getTotalItemCountUseCase,
             menuItemMoreInfoUseCase
         )
     }
@@ -56,30 +52,21 @@ class MenuViewModelTest {
 
     @Test
     fun `getMenuState UI state`() = runTest(testDispatcher){
-        assertEquals(com.dbng.presentation.ui.menu.utils.MenuUIState.Loading, viewModel.menuState.value)
+        assertEquals(MenuUIState.Loading, viewModel.menuState.value)
     }
+
 
 //    @Test
-//    fun `getItems return current list of items`()  = runTest(testDispatcher){
-//        val mockMenuItems = listOf(
-//            MenuItem(id = 1, name = "Pizza", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
-//            MenuItem(id = 1, name = "Burger", imageURL = "url", description = "test", price = 20,  quantity= 1, menuType="a", category="b" , subCategory="c", itemType="d", ingredients="e"),
-//        )
-//        `when`()
-//
+//    fun getDetailItems() {
 //    }
-
-    @Test
-    fun getDetailItems() {
-    }
-
-    @Test
-    fun isLoading() {
-    }
-
-    @Test
-    fun setLoading() {
-    }
+//
+//    @Test
+//    fun isLoading() {
+//    }
+//
+//    @Test
+//    fun setLoading() {
+//    }
 
     @Test
     fun `fetchMenuList return success`() = runTest(testDispatcher) {
@@ -113,29 +100,31 @@ class MenuViewModelTest {
                 ingredients = "e"
             ),
         )
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Success(mockMenuItems))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Success(mockMenuItems))
         viewModel.fetchMenuList()
-        assertEquals(com.dbng.presentation.ui.menu.utils.MenuUIState.Success, viewModel.menuState.value)
+        assertEquals(MenuUIState.Success, viewModel.menuState.value)
         assertEquals(mockMenuItems, viewModel.items.value)
     }
+
     @Test
     fun `fetchMenuList return failure with IOException`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.NetworkError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.NetworkError))
         viewModel.fetchMenuList()
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Network Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Network Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
     @Test
     fun `fetchMenuList return failure with HttpException`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.ServerError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.ServerError))
         viewModel.fetchMenuList()
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Server Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        advanceUntilIdle()
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Server Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
 
@@ -143,35 +132,35 @@ class MenuViewModelTest {
     fun `fetchMenuList return failure`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.UnknownError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.UnknownError))
         viewModel.fetchMenuList()
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Unknown Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
     @Test
     fun `fetchMenuList return none`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = null))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = null))
         viewModel.fetchMenuList()
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Unknown Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
     }
 
     @Test
     fun `fetchMenuList return NoDataFoundError`() = runTest(testDispatcher) {
         val from = 0
         val size = 20
-        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.NoDataFoundError))
+        `when`(fetchMenuItemsUseCase(from,size)).thenReturn(Resource.Error(null,responseError = ResponseError.NoDataFoundError))
         viewModel.fetchMenuList()
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("No More Data", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("No More Data", (viewModel.menuState.value as MenuUIState.Error).message)
     }
 
 
     @Test
-    fun `fetchMenuItemDetails return success`() = runTest(testDispatcher) {
+    fun `fetchMenuItemDetails return success`() = runTest(testDispatcher)  {
         var itemID = 123
         val mockMenuItems = com.dbng.domain.model.MenuItem(
             id = 123,
@@ -186,59 +175,59 @@ class MenuViewModelTest {
             itemType = "d",
             ingredients = "e"
         )
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Success(mockMenuItems))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Success(mockMenuItems))
         viewModel.fetchMenuItemDetails(itemID)
-        assertEquals(com.dbng.presentation.ui.menu.utils.MenuUIState.Success, viewModel.menuState.value)
+        assertEquals(MenuUIState.Success, viewModel.menuState.value)
         assertEquals(mockMenuItems, viewModel.detailItems.value)
     }
     @Test
-    fun `fetchMenuItemDetails return failure with IOException`() = runTest(testDispatcher) {
+    fun `fetchMenuItemDetails return failure with IOException`() = runTest(testDispatcher)  {
         var itemID = 123
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.NetworkError))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = ResponseError.NetworkError))
         viewModel.fetchMenuItemDetails(itemID)
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Network Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Network Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
     @Test
     fun `fetchMenuItemDetails return failure with HttpException`() = runTest(testDispatcher) {
         var itemID = 123
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.ServerError))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = ResponseError.ServerError))
         viewModel.fetchMenuItemDetails(itemID)
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Server Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Server Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
 
     @Test
     fun `fetchMenuItemDetails return failure`() = runTest(testDispatcher) {
         var itemID = 123
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.UnknownError))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = ResponseError.UnknownError))
         viewModel.fetchMenuItemDetails(itemID)
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Unknown Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
 
     }
     @Test
-    fun `fetchMenuItemDetails return none`() = runTest(testDispatcher) {
+    fun `fetchMenuItemDetails return none`() = runTest(testDispatcher)  {
         var itemID = 123
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = null))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = null))
         viewModel.fetchMenuItemDetails(itemID)
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("Unknown Error", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("Unknown Error", (viewModel.menuState.value as MenuUIState.Error).message)
     }
     @Test
     fun `fetchMenuItemDetails return NoDataFoundError`() = runTest(testDispatcher) {
         var itemID = 123
-        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(com.dbng.core.domain.Resource.Error(null,responseError = com.dbng.core.domain.utils.ResponseError.NoDataFoundError))
+        `when`(menuItemMoreInfoUseCase(itemID)).thenReturn(Resource.Error(null,responseError = ResponseError.NoDataFoundError))
         viewModel.fetchMenuItemDetails(itemID)
-        assertTrue(viewModel.menuState.value is com.dbng.presentation.ui.menu.utils.MenuUIState.Error)
-        assertEquals("No More Data", (viewModel.menuState.value as com.dbng.presentation.ui.menu.utils.MenuUIState.Error).message)
+        assertTrue(viewModel.menuState.value is MenuUIState.Error)
+        assertEquals("No More Data", (viewModel.menuState.value as MenuUIState.Error).message)
     }
 
     @Test
     fun `updateMenuUIState update Success`()= runTest(testDispatcher) {
-        viewModel.updateMenuUIState(com.dbng.presentation.ui.menu.utils.MenuUIState.Success)
-        assertEquals(com.dbng.presentation.ui.menu.utils.MenuUIState.Success, viewModel.menuState.value)
+        viewModel.updateMenuUIState(MenuUIState.Success)
+        assertEquals(MenuUIState.Success, viewModel.menuState.value)
     }
 }

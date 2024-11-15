@@ -18,14 +18,14 @@ import org.mockito.MockitoAnnotations
 // Created by Nagaraju on 13/11/24.
 
 class FetchMenuItemsUseCaseTest {
-    private lateinit var menuRepository: com.dbng.domain.repository.MenuRepository
-    private lateinit var fetchMenuItemsUseCase: com.dbng.domain.usecase.FetchMenuItemsUseCase
+    private lateinit var menuRepository: MenuRepository
+    private lateinit var fetchMenuItemsUseCase: FetchMenuItemsUseCase
     private val testDispatcher = TestCoroutineDispatcher()
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        menuRepository = Mockito.mock(com.dbng.domain.repository.MenuRepository::class.java)
-        fetchMenuItemsUseCase = com.dbng.domain.usecase.FetchMenuItemsUseCase(menuRepository)
+        menuRepository = Mockito.mock(MenuRepository::class.java)
+        fetchMenuItemsUseCase = FetchMenuItemsUseCase(menuRepository)
     }
 
     @After
