@@ -4,9 +4,8 @@ import com.dbng.tastyrecipesapp.core.domain.Resource
 import com.dbng.tastyrecipesapp.core.domain.utils.ResponseError
 import com.dbng.tastyrecipesapp.feature_menu.domain.model.MenuItem
 import com.dbng.tastyrecipesapp.feature_menu.domain.repository.MenuRepository
-import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.GetTotalItemCountUseCase
-import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuItemMoreInfoUseCase
 import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.FetchMenuItemsUseCase
+import com.dbng.tastyrecipesapp.feature_menu.domain.usecase.MenuItemMoreInfoUseCase
 import com.dbng.tastyrecipesapp.feature_menu.presentation.menu.utils.MenuUIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -30,7 +29,6 @@ class MenuViewModelTest {
     private lateinit var viewModel: MenuViewModel
     private lateinit var repository: MenuRepository
     private lateinit var fetchMenuItemsUseCase: FetchMenuItemsUseCase
-    private lateinit var getTotalItemCountUseCase: GetTotalItemCountUseCase
     private lateinit var menuItemMoreInfoUseCase: MenuItemMoreInfoUseCase
     private val testDispatcher = TestCoroutineDispatcher()
 
@@ -40,9 +38,8 @@ class MenuViewModelTest {
         MockitoAnnotations.initMocks(this)
         repository = mock(MenuRepository::class.java)
         fetchMenuItemsUseCase = FetchMenuItemsUseCase(repository)
-        getTotalItemCountUseCase = GetTotalItemCountUseCase(repository)
         menuItemMoreInfoUseCase = MenuItemMoreInfoUseCase(repository)
-        viewModel = MenuViewModel(fetchMenuItemsUseCase, getTotalItemCountUseCase, menuItemMoreInfoUseCase)
+        viewModel = MenuViewModel(fetchMenuItemsUseCase, menuItemMoreInfoUseCase)
     }
 
     @After
