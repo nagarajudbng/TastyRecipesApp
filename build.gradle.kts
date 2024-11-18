@@ -18,7 +18,6 @@ buildscript {
         classpath (libs.hilt.android.gradle.plugin)
     }
 }
-
 subprojects {
     tasks.withType<Test> {
         testLogging {
