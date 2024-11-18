@@ -2,7 +2,7 @@ name: Run Test
 
 on:
   pull_request:
-    branches: [Modular]
+    branches: [main]
 
 jobs:
     buid:
