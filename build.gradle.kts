@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -13,5 +15,15 @@ buildscript {
     dependencies {
         // other plugins...
         classpath (libs.hilt.android.gradle.plugin)
+    }
+}
+
+subprojects {
+    tasks.withType<Test> {
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+            events("started", "skipped", "passed", "failed")
+            showStandardStreams = true
+        }
     }
 }
