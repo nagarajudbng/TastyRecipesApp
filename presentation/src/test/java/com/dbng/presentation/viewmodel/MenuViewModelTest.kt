@@ -56,17 +56,6 @@ class MenuViewModelTest {
     }
 
 
-//    @Test
-//    fun getDetailItems() {
-//    }
-//
-//    @Test
-//    fun isLoading() {
-//    }
-//
-//    @Test
-//    fun setLoading() {
-//    }
 
     @Test
     fun `fetchMenuList return success`() = runTest(testDispatcher) {
