@@ -26,6 +26,26 @@ The app follows a modular architecture pattern with the following main modules:
 
 **JUnit** 
 
+<H1>Android App with Continuous Integration</H1>
+
+This repository hosts the source code for our Android application, featuring a fully integrated Continuous Integration (CI) pipeline using GitHub Actions. The CI setup ensures automated testing.
+
+<H1>Key Features of the Android App</H1>
+
+**Seamless User Experience:** Designed with modern UI/UX principles, offering an intuitive interface for users using Jetpack Compose.
+
+**High Performance:** Optimized for efficiency and minimal resource usage.
+
+**Modular Architecture:** Developed with scalable and maintainable practices using the MVVM architecture pattern.
+
+<H1>Continuous Integration (CI) Setup</H1>
+
+Our CI pipeline automates the following key tasks to maintain a high-quality codebase.
+
+**Code Validation:** Automatically triggers pull requests and pushes them to the main branch.
+
+**Unit Testing:** Runs all unit tests using JUnit to verify the correctness of individual modules. Reports failures and provides insights into breaking changes.
+
 
 <H1>Branches</H1>   
 This repository contains two main branches, each showcasing a different aspect of the TastyRecipesApp architecture:
@@ -33,6 +53,9 @@ This repository contains two main branches, each showcasing a different aspect o
 **Main Branch:** This branch contains the app with an added Menu feature module.
 
 **Modular Branch:** This branch demonstrates a fully modularized version of the app, where each layer (data, domain, and presentation) is organized into its own module.
+
+
+
 
 **Main Branch Structure Image**
 
