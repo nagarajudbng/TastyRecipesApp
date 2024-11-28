@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 buildscript {
@@ -18,6 +19,7 @@ buildscript {
         classpath (libs.hilt.android.gradle.plugin)
     }
 }
+
 subprojects {
     tasks.withType<Test> {
         testLogging {
