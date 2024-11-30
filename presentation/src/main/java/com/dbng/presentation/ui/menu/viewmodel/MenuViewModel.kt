@@ -81,4 +81,13 @@ class MenuViewModel @Inject constructor(
     fun updateMenuUIState(success: MenuUIState.Success) {
         _menuState.value = success
     }
+
+    fun testPrivateMethod(): String {
+        val text = privateMethod()
+        println(text)
+        return text
+    }
+    private fun  privateMethod():String{
+        return "HelloPrivateMethod"
+    }
 }

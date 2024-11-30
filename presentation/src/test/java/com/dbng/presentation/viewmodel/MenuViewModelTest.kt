@@ -3,6 +3,8 @@ package com.dbng.presentation.viewmodel
 import com.dbng.core.domain.Resource
 import com.dbng.core.domain.utils.ResponseError
 import com.dbng.presentation.ui.menu.utils.MenuUIState
+import com.dbng.presentation.ui.menu.viewmodel.MenuViewModel
+import com.nhaarman.mockitokotlin2.doReturn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -18,6 +20,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import java.lang.reflect.Method
 
 
 // Created by Nagaraju on 13/11/24.
@@ -218,5 +221,18 @@ class MenuViewModelTest {
     fun `updateMenuUIState update Success`()= runTest(testDispatcher) {
         viewModel.updateMenuUIState(MenuUIState.Success)
         assertEquals(MenuUIState.Success, viewModel.menuState.value)
+    }
+
+    @Test
+    fun `privateMethod test private method`()= runTest(testDispatcher) {
+        val method: Method = MenuViewModel::class.java.getDeclaredMethod("privateMethod")
+        method.isAccessible = true
+        val text = method.invoke(viewModel) as String
+        assertEquals("HelloPrivateMethod", text)
+    }
+    @Test
+    fun `testPrivateMethod test private method`()= runTest(testDispatcher) {
+        val text = viewModel.testPrivateMethod()
+        assertEquals("HelloPrivateMethod", text)
     }
 }
