@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     id ("kotlin-android")
     id ("kotlin-parcelize")
+    id("maven-publish")
 }
 
 android {
@@ -36,6 +37,28 @@ android {
     }
 }
 
+publishing{
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "com.dbng.domainlayer"
+            artifactId = "recipedomain"
+            version = "1.0.1"
+            println("Test aar file "+layout.buildDirectory.file("outputs/aar/domain-release.aar"))
+            artifact(layout.buildDirectory.file("outputs/aar/domain-release.aar"))
+
+        }
+    }
+    repositories{
+        maven {
+            name = "recipepackages"
+            url = uri("https://maven.pkg.github.com/nagarajudbng/RecipeDomainLayer")
+            credentials{
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
