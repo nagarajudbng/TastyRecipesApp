@@ -1,5 +1,7 @@
 <H1>TastyRecipesApp</H1>
 
+https://nagarajudeshetty.in/tastyrecipesapp/
+
 TastyRecipesApp is an Android application designed for users to explore, customize, and enjoy a variety of recipes.
 
 https://github.com/user-attachments/assets/d7034643-df28-4be6-96e7-c408a6c3be8d
