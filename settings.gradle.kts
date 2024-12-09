@@ -16,6 +16,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name = "recipepackages"
+            url = uri("https://maven.pkg.github.com/nagarajudbng/RecipeDomainLayer")
+            credentials{
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 

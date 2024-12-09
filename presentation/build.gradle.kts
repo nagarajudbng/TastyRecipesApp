@@ -53,9 +53,10 @@ android {
 
 dependencies {
 
-    implementation(project(":domain"))
+//    implementation(project(":domain"))
     implementation(project(":core"))
 
+    implementation(libs.recipedomain)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
